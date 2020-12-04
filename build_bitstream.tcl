@@ -1,4 +1,3 @@
-add_files [ glob ./src/design/*.v]
 
 synth_design -top top -part xc7a100tcsg324-1
 
@@ -8,4 +7,4 @@ place_design
 
 route_design
 
-write_bitstream ./bin/design.bit
+write_bitstream -force ./bin/design.bit
