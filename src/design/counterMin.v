@@ -1,37 +1,17 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11/01/2020 05:08:19 PM
-// Design Name: 
-// Module Name: counterMin
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module counterMin(
-    input clk, reset,
-    output zC 
+    input z60, rst,
+    output z602
     );
     
-    reg [5:0] count;
+    reg [26:0] count;
     
-    assign zC = (count == 6'd60) ? 1'b1 : 1'b0;
+    assign z602 = (count == 27'b101111101011110000100000000) ? 1'b1 : 1'b0;
     
-    always @(posedge clk, posedge reset)
-        if(reset) count <= 6'b0;
+    always @(posedge z60, posedge rst)
+        if(rst) count <= 27'b0;
         else
-            if(count == 6'd60) count <= 6'b0;
+            if(count == 27'b101111101011110000100000000 || z60 == 1'b0) count <= 27'b0;
             else   count <= count + 1;
 endmodule
