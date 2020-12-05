@@ -31,9 +31,10 @@ wire rotate;
 wire [ 2:0] switch;       //for testing
 wire [15:0] modSwitches;
 
-BCD bcd (.binary(switches[7:0]), .decimal(modSwitches[12:0]));
+BCD bcdm (.binary(switches[7:0]), .decimal(modSwitches[7:0]));
+BCD bcdh (.binary(switches[15:8]), .decimal(modSwitches[15:8]));
 rotater rotater (.clk(clk), .rst(rst), .rotate(rotate));
-shift shift (.clk(clk), .rotate(rotate), .rst(rst), .anode(anode[7:0]));
+shift shift (.rotate(rotate), .rst(rst), .anode(anode[7:0]));
 counter_7seg counter(.clk(clk), .rst(rst), .rotate(rotate), .switch(switch[2:0]));
 mux8to1 mux8to1(.switches(modSwitches[15:0]), .switch(switch[2:0]), .HexVal(HexVal[3:0]));
 hextosgg hextosgg(.HexVal(HexVal[3:0]), .cathode(cathode[7:0]));

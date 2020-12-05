@@ -8,15 +8,16 @@ module top (
     output [7:0] anode
 );
     wire rst;
-    wire secCount, minCount, hourCount;
-    wire [5:0] minCountNum;
+    wire tickCount, secCount, minCount, hourCount;
+    wire [7:0] secCountNum, minCountNum;
     
     assign rst = ~rst_btn;
     
-    counterSec cs_i(.clk(clk), .rst(rst), .c(sw), .zC(secCount));
-    counterMin cm_i(.clk(clk), .rst(rst), .c(secCount), .count(minCountNum), .zC(minCount));
-    counterHour ch_i(.clk(clk), .rst(rst), .c(minCount), .zC(hourCount));
-    SevenSegmentDisplay sseg(.clk(clk), .rst(rst), .switches(minCountNum), .cathode(cathode), .anode(anode));
+    counter #(.BITS(27), .MAX_VAL(100000000)) ct_i(.clk(clk), .rst(rst), .c(sw), .zC(tickCount)); //counter each tick
+    counter #(.BITS(6), .MAX_VAL(60)) cs_i(.clk(clk), .rst(rst), .c(tickCount), .count(secCountNum[5:0]), .zC(secCount)); //counts seconds
+    counter #(.BITS(6), .MAX_VAL(60)) cm_i(.clk(clk), .rst(rst), .c(secCount), .count(minCountNum[5:0]), .zC(minCount)); //counts minutes
+    counter #(.BITS(5), .MAX_VAL(24)) ch_i(.clk(clk), .rst(rst), .c(minCount), .zC(hourCount)); //counts hours
+    SevenSegmentDisplay sseg(.clk(clk), .rst(rst), .switches({minCountNum, secCountNum}), .cathode(cathode), .anode(anode));
     
 
     assign LED[0] = secCount;

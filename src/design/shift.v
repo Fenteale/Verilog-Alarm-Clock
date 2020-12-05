@@ -21,7 +21,7 @@
 
 
 module shift(
-input clk, rst, rotate,
+input rst, rotate,
 output reg [7:0] anode
     );
 always @(posedge rotate, posedge rst) //always @
