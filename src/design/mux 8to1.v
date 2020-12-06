@@ -33,10 +33,13 @@ always @ (*)
         3'b001: HexVal[3:0] = switches[7:4];
         3'b010: HexVal[3:0] = switches[11:8];
         3'b011: HexVal[3:0] = switches[15:12];
+        default:HexVal[3:0] = switches[3:0];
+        /*
         3'b100: HexVal[3:0] = switches[3:0];
         3'b101: HexVal[3:0] = switches[7:4];
         3'b110: HexVal[3:0] = switches[11:8];
         3'b111: HexVal[3:0] = switches[15:12];
+        */
     endcase
   end
 

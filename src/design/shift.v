@@ -22,11 +22,11 @@
 
 module shift(
 input rst, rotate,
-output reg [7:0] anode
+output reg [3:0] anode
     );
 always @(posedge rotate, posedge rst) //always @
-    if(rst) anode = 8'b1111_1110; 
-    else if(rotate) anode = {anode [6:0], anode[7]};
+    if(rst) anode = 4'b1110; 
+    else if(rotate) anode = {anode [2:0], anode[3]};
     
 
 endmodule

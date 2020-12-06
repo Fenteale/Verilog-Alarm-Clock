@@ -1,6 +1,6 @@
 module BCD(
 	input [7:0] binary,
-	output [12:0] decimal
+	output [11:0] decimal
 	);
 
 	reg [3:0] Hundreds;
