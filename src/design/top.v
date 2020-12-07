@@ -5,7 +5,8 @@ module top (
 	input [2:0] sw,
 	output [4:0] LED,
     output [7:0] cathode,
-    output [7:0] anode
+    output [7:0] anode,
+    output AUD_PWM
 );
     wire rst;
     wire tickCount, secCount, minCount, hourCount, db_tick;
@@ -13,11 +14,11 @@ module top (
     wire db_co, db_uo, db_do, db_lo, db_ro;
     wire [7:0] secCountNum, minCountNum, hourCountNum, dbCountTicks;
 
-    wire [15:0] clkTime, clkSet, clkAlarm, ssegDisp;
+    wire [15:0] clkTime, clkSet, clkAlarm, clkMus, ssegDisp;
 
     assign clkTime = {hourCountNum, minCountNum};
 
-    clockMux cm (.a(clkTime), .b(clkSet), .c(clkAlarm), .sel(showSet), .out(ssegDisp));
+    clockMux cm (.a(clkTime), .b(clkSet), .c(clkAlarm), .d(clkMus), .sel(showSet + (AhoursSel==2'b11)), .out(ssegDisp));
     
     assign rst = ~rst_btn;
 
@@ -43,7 +44,7 @@ module top (
     wire setHourSig = (showSet == 2'b01) & (hoursSel == 2'b01);
     //wire setHourSig = ((hoursSel[0]==1'b1) && showSet[1]==1'b1);
 
-    counter #(.BITS(2), .MAX_VAL(2)) setModeCount (.clk(clk), .rst(rst), .set(0), .c(db_co), .count(hoursSel), .zC(CsetTime));
+    counter #(.BITS(2), .MAX_VAL(2)) setModeCount (.clk(clk), .rst(rst), .set(0), .c(db_co & (showSet == 2'b01)), .count(hoursSel), .zC(CsetTime));
     counterUpDown #(.BITS(6), .MAX_VAL(60)) cCSm (.clk(clk), .rst(rst), .c(setMinSig), .cu(db_uo), .cd(db_do), .count(clkSetMin));
     counterUpDown #(.BITS(5), .MAX_VAL(24)) cCSh (.clk(clk), .rst(rst), .c(setHourSig), .cu(db_uo), .cd(db_do), .count(clkSetHour));
     assign clkSet = {clkSetHour, clkSetMin};
@@ -53,14 +54,17 @@ module top (
     // ALARM SET SECTION
     wire [1:0] AhoursSel;
     wire [7:0] AclkSetMin, AclkSetHour;
+    wire [1:0] musSelReg;
     wire AsetTime;
     wire AsetMinSig = (showSet == 2'b10) & (AhoursSel == 2'b00);
     wire AsetHourSig = (showSet == 2'b10) & (AhoursSel == 2'b01);
+    wire AsetMusSig = (showSet == 2'b10) & (AhoursSel == 2'b10);
     wire soundAlarm = (clkAlarm == clkTime);
-
-    counter #(.BITS(2), .MAX_VAL(2)) AsetModeCount (.clk(clk), .rst(rst), .set(0), .c(db_co), .count(AhoursSel), .zC(AsetTime));
+    assign clkMus = {14'b0, musSelReg};
+    counter #(.BITS(2), .MAX_VAL(3)) AsetModeCount (.clk(clk), .rst(rst), .set(0), .c(db_co & (showSet == 2'b10)), .count(AhoursSel), .zC(AsetTime));
     counterUpDown #(.BITS(6), .MAX_VAL(60)) AcCSm (.clk(clk), .rst(rst), .c(AsetMinSig), .cu(db_uo), .cd(db_do), .count(AclkSetMin));
     counterUpDown #(.BITS(5), .MAX_VAL(24)) AcCSh (.clk(clk), .rst(rst), .c(AsetHourSig), .cu(db_uo), .cd(db_do), .count(AclkSetHour));
+    counterUpDown #(.BITS(2), .MAX_VAL(3)) musSel (.clk(clk), .rst(rst), .c(AsetMusSig), .cu(db_uo), .cd(db_do), .count(musSelReg));
     assign clkAlarm = {AclkSetHour, AclkSetMin};
     // END ALARM SET SECTION
     
@@ -73,10 +77,14 @@ module top (
     // END CLOCK MODE SECTION
     
     
+    //SOUND SECTION
+    music mu (.clk(clk), .rst(rst), .alarm(soundAlarm), .sel(musSelReg), .speaker(AUD_PWM));
+    //END SOUND SECTION
+
     SevenSegmentDisplay sseg(.clk(clk), .rst(rst), .switches(ssegDisp), .cathode(cathode), .anode(anode));
 
-    assign LED[1:0] = showSet;
-    assign LED[3:2] = hoursSel;
+    assign LED[1:0] = musSelReg;
+    assign LED[3:2] = AhoursSel;
     assign LED[4] = soundAlarm;
     assign anode[7:4] = 4'b1111;
 
