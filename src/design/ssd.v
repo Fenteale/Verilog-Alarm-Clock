@@ -28,17 +28,18 @@ output   wire [ 3:0] anode        //seven segment anode signals
 );
 wire [3:0] HexVal;
 wire rotate;
-wire [ 2:0] switch;       //for testing
+wire [ 2:0] switch;
+wire dummy;
 wire [15:0] modSwitches;
 
 BCD bcdm (.binary(switches[7:0]), .decimal(modSwitches[7:0]));
 BCD bcdh (.binary(switches[15:8]), .decimal(modSwitches[15:8]));
 //rotater rotater (.clk(clk), .rst(rst), .rotate(rotate));
 counter #(.BITS(13), .MAX_VAL(4999)) rotater (.clk(clk), .rst(rst), .c(1'b1), .zC(rotate));
-shift shift (.rotate(rotate), .rst(rst), .anode(anode[3:0]));
+shift shift (.clk(clk), .rotate(rotate), .rst(rst), .anode(anode));
 //counter_7seg counter(.clk(clk), .rst(rst), .rotate(rotate), .switch(switch[2:0]));
-counter #(.BITS(3), .MAX_VAL(10)) counter(.clk(clk), .rst(rst), .c(rotate), .count(switch[2:0]));
-mux8to1 mux8to1(.switches(modSwitches[15:0]), .switch(switch[2:0]), .HexVal(HexVal[3:0]));
+counter #(.BITS(3), .MAX_VAL(4)) counter(.clk(clk), .rst(rst), .c(rotate), .count(switch));
+mux8to1 mux8to1(.switches(modSwitches[15:0]), .switch(switch), .HexVal(HexVal[3:0]));
 hextosgg hextosgg(.HexVal(HexVal[3:0]), .cathode(cathode[7:0]));
 
 endmodule

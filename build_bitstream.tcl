@@ -1,5 +1,6 @@
 
-synth_design -top top -part xc7a100tcsg324-1
+
+synth_design -top $topModule -part xc7a100tcsg324-1
 
 opt_design
 
