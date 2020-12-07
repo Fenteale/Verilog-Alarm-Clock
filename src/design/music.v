@@ -104,7 +104,7 @@ module songs(
 );
 
 wire [6:0] song2address = address  [6:0];
-wire [4:0] song3address = address  [4:0];
+wire [5:0] song3address = address  [5:0];
 
 always @(posedge clk, posedge rst)
 	if(rst) note <= 8'b0;
@@ -113,13 +113,13 @@ always @(posedge clk, posedge rst)
 		2'b00:
 		case(address)
 			0: note<= 8'd25; //G
-			1: note<= 8'd27; //A //A
-			2: note<= 8'd27; //A //A
+			1: note<= 8'd27; //A
+			2: note<= 8'd27; //A
 			3: note<= 8'd25; //G
-			4: note<= 8'd22; //E //E
-			5: note<= 8'd22; //E //E
-			6: note<= 8'd30; //C //C
-			7: note<= 8'd30; //C //C
+			4: note<= 8'd22; //E
+			5: note<= 8'd22; //E
+			6: note<= 8'd30; //C
+			7: note<= 8'd30; //C
 			8: note<= 8'd27; //A
 			9: note<= 8'd27; //A
 			10: note<= 8'd25; //G
@@ -379,8 +379,8 @@ always @(posedge clk, posedge rst)
 				17 : note<= 8'd22; //E 
 				18 : note<= 8'd25; //G 
 				19 : note<= 8'd25; //G 
-				20 : note<= 8'd30; //C 
-				21 : note<= 8'd30; //C 
+				20 : note<= 8'd18; //C 
+				21 : note<= 8'd18; //C 
 				22 : note<= 8'd20; //D 
 				23 : note<= 8'd20; //D 
 				24 : note<= 8'd22; //E 
@@ -439,8 +439,8 @@ always @(posedge clk, posedge rst)
 				77 : note<= 8'd22; //E 
 				78 : note<= 8'd25; //G 
 				79 : note<= 8'd25; //G 
-				80 : note<= 8'd30; //C 
-				81 : note<= 8'd30; //C 
+				80 : note<= 8'd18; //C 
+				81 : note<= 8'd18; //C 
 				82 : note<= 8'd20; //D 
 				83 : note<= 8'd20; //D 
 				84 : note<= 8'd22; //E 
@@ -475,38 +475,73 @@ always @(posedge clk, posedge rst)
 				113 : note<= 8'd23; //D 
 				114 : note<= 8'd20; //D 
 				115 : note<= 8'd20; //D 
-				116 : note<= 8'd30; //C 
-				117 : note<= 8'd30; //C 
+				116 : note<= 8'd18; //C 
+				117 : note<= 8'd18; //C 
 				
 				default: note <= 8'd0;
 			endcase
 
 		2'b10: 
-			case(song3address)
-				0 : note<= 8'd22; //E 
-				1 : note<= 8'd22; //E 
-				2 : note<= 8'd22; //E 
-				3 : note<= 8'd22; //E 
+case(song3address)
+				0 : note<= 8'd20; //D 
+				1 : note<= 8'd20; //D 
+				2 : note<= 8'd20; //D 
+				3 : note<= 8'd20; //D 
 				4 : note<= 8'd22; //E 
 				5 : note<= 8'd22; //E 
-				6 : note<= 8'd0; 
-				7 : note<= 8'd0; 
-				8 : note<= 8'd22; //E 
-				9 : note<= 8'd22; //E 
-				10 : note<= 8'd22; //E 
-				11 : note<= 8'd22; //E 
-				12 : note<= 8'd22; //E 
-				13 : note<= 8'd22; //E 
-				14 : note<= 8'd0; 
-				15 : note<= 8'd0; 
-				16 : note<= 8'd22; //E 
-				17 : note<= 8'd22; //E 
-				18 : note<= 8'd25; //G 
-				19 : note<= 8'd25; //G
-				default: note <= 8'd0;
-			endcase
-		default: note<= 8'd0;
+				6 : note<= 8'd20; //D 
+				7 : note<= 8'd20; //D 
+				8 : note<= 8'd25; //G 
+				9 : note<= 8'd25; //G 
+				10 : note<= 8'd24; //F 
+				11 : note<= 8'd24; //F 
+				12 : note<= 8'd24; //F 
+				13 : note<= 8'd24; //F 
+				14 : note<= 8'd20; //D 
+				15 : note<= 8'd20; //D 
+				16 : note<= 8'd20; //D 
+				17 : note<= 8'd20; //D 
+				18 : note<= 8'd22; //E 
+				19 : note<= 8'd22; //E 
+				20 : note<= 8'd20; //D 
+				21 : note<= 8'd20; //D 
+				22 : note<= 8'd27; //A  //Hight 
+				23 : note<= 8'd27; //A  
+				24 : note<= 8'd25; //G 
+				25 : note<= 8'd25; //G 
+				26 : note<= 8'd25; //G 
+				27 : note<= 8'd25; //G 
+				28 : note<= 8'd20; //D 
+				29 : note<= 8'd20; //D 
+				30 : note<= 8'd20; //D 
+				31 : note<= 8'd20; //D 
+				32 : note<= 8'd32; //D //HIGH 
+				33 : note<= 8'd32; //D 
+				34 : note<= 8'd29; //B //high
+				35 : note<= 8'd29; //B 
+				36 : note<= 8'd25; //G 
+				37 : note<= 8'd25; //G 
+				38 : note<= 8'd24; //F 
+				39 : note<= 8'd24; //F 
+				40 : note<= 8'd22; //E 
+				41 : note<= 8'd22; //E 
+				42 : note<= 8'd30; //C 
+				43 : note<= 8'd30; //C 
+				44 : note<= 8'd30; //C 
+				45 : note<= 8'd30; //C 
+				46 : note<= 8'd29; //B 
+				47 : note<= 8'd29; //B 
+				48 : note<= 8'd25; //G 
+				49 : note<= 8'd25; //G 
+				50 : note<= 8'd27; //A  
+				51 : note<= 8'd27; //A  
+				52 : note<= 8'd25; //G 
+				53 : note<= 8'd25; //G 
+				54 : note<= 8'd25; //G 
+				55 : note<= 8'd25; //G 
 
-		endcase
-	end
+				default: note <= 8'd0;
+				endcase
+			endcase
+			end
 endmodule
