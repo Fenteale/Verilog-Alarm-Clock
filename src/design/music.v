@@ -13,15 +13,15 @@ module music(
 );
 
 	reg [32:0] tone;
-	always @(posedge clk, posedge rst)
+	always @(posedge clk, posedge rst) //counter to get tone
 		if(rst) tone <= 33'b0;
 		else tone <= tone+33'd1;
 
-	wire [7:0] fullnote;
+	wire [7:0] fullnote; //just a wire
 
-	songs get_fullnote1(.clk(clk), .rst(rst), .address(tone[31:24]), .note(fullnote),.sel(sel),.alarm(alarm));
+	songs get_fullnote1(.clk(clk), .rst(rst), .address(tone[31:24]), .note(fullnote),.sel(sel),.alarm(alarm)); //used to output note from the case statement 
 
-	wire [2:0] octave;
+	wire [2:0] octave; 
 	wire [3:0] note;
 
 	divide_by12 get_octave_and_note(.numerator(fullnote[5:0]), .quotient(octave), .remainder(note));
@@ -111,7 +111,7 @@ always @(posedge clk, posedge rst)
 	if(rst) note <= 8'b0;
 	else if(alarm) begin
 		case(sel)
-		2'b00:
+		2'b00:                     //Rudolf The Red Nose Raindeer
 		case(address)
 			0: note<= 8'd25; //G
 			1: note<= 8'd27; //A
@@ -359,7 +359,7 @@ always @(posedge clk, posedge rst)
 			default: note <= 8'd0;
 		endcase
 		2'b01:
-			case(song2address)
+			case(song2address)                //Jingle Bells
 				0 : note<= 8'd22; //E 
 				1 : note<= 8'd0; //E 
 				2 : note<= 8'd22; //E 
@@ -493,7 +493,7 @@ always @(posedge clk, posedge rst)
 			endcase
 
 		2'b10: 
-case(song3address)
+case(song3address)                    //Happy Birthday
 				0 : note<= 8'd20; //D 
 				1 : note<= 8'd20; //D 
 				2 : note<= 8'd20; //D 
@@ -554,7 +554,7 @@ case(song3address)
 				default: note <= 8'd0;
 				endcase
 2'b11: 
-    case(song4address)
+    case(song4address)                   //random alarm sound
 				0 : note<= 8'd20; //D 
 				1 : note<= 8'd20; //D 
 				2 : note<= 8'd20; //D 
